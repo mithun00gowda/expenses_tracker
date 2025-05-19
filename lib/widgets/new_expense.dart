@@ -13,7 +13,7 @@ class _NewExpenseState extends State<NewExpense> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   DateTime? _selectedDate ;
-  Category? selectedCategory;
+  Category selectedCategory = Category.leisure;
 
 
   void datePicker() async{
@@ -24,6 +24,14 @@ class _NewExpenseState extends State<NewExpense> {
    setState(() {
      _selectedDate = pickedDate;
    });
+  }
+
+  void _submitFormDate() {
+    final enteredAmount = double.parse(amountController.text);
+    final amountIsValid = enteredAmount == null || enteredAmount <= 0;
+    if(titleController.text.trim().isEmpty || amountIsValid || _selectedDate == null){
+      //show error message
+    }
   }
   @override
   void dispose() {
@@ -87,10 +95,7 @@ class _NewExpenseState extends State<NewExpense> {
             ElevatedButton(onPressed: (){
               Navigator.pop(context);
             }, child: const Text('Cancel')),
-            ElevatedButton(onPressed: (){
-              print(titleController.text);
-              print(amountController.text);
-            }, child: const Text('Save Expense'))
+            ElevatedButton(onPressed: _submitFormDate, child: const Text('Save Expense'))
           ],
         )
       ],
