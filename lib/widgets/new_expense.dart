@@ -13,6 +13,7 @@ class _NewExpenseState extends State<NewExpense> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   DateTime? _selectedDate ;
+  Category? selectedCategory;
 
 
   void datePicker() async{
@@ -66,8 +67,23 @@ class _NewExpenseState extends State<NewExpense> {
            ))
          ],
        ),
+        SizedBox(height: 14,),
         Row(
           children: [
+            DropdownButton(
+                value: selectedCategory,
+                items: Category.values.map((categorys) => DropdownMenuItem(
+                value: categorys,
+                child: Text(categorys.name.toUpperCase()))).toList(), onChanged: (value){
+              print(value);
+              if(value == null){
+                return;
+              }
+              setState(() {
+                selectedCategory = value;
+              });
+            }),
+            const Spacer(),
             ElevatedButton(onPressed: (){
               Navigator.pop(context);
             }, child: const Text('Cancel')),
