@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
-
+  const NewExpense({super.key, required this.onAddExpense});
+  final void Function(Expense expense) onAddExpense;
   @override
   State<NewExpense> createState() => _NewExpenseState();
 }
@@ -27,11 +27,23 @@ class _NewExpenseState extends State<NewExpense> {
   }
 
   void _submitFormDate() {
-    final enteredAmount = double.parse(amountController.text);
-    final amountIsValid = enteredAmount == null || enteredAmount <= 0;
+    final enteredAmount = double.tryParse(amountController.text);
+    final amountIsValid = enteredAmount == null ||enteredAmount <= 0;
     if(titleController.text.trim().isEmpty || amountIsValid || _selectedDate == null){
       //show error message
+      showDialog(context: context, builder: (ctx) => AlertDialog(
+        title: const Text('Invalid input'),
+        content: const Text('please make sure a valid title, amount, date and category wad entered.'),
+        actions: [
+          TextButton(onPressed: (){
+            Navigator.pop(ctx);
+          }, child: Text('Okay'))
+        ],
+      ),);
+      return;
     }
+    widget.onAddExpense(Expense(title: titleController.text, amount: enteredAmount, date: _selectedDate!, catogry: selectedCategory),);
+    Navigator.pop(context);
   }
   @override
   void dispose() {
@@ -43,7 +55,7 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.all(16),child: Column(
+    return Padding(padding: EdgeInsets.fromLTRB(16,40,16,16),child: Column(
       children: [
         TextField(
           controller: titleController,
@@ -83,7 +95,6 @@ class _NewExpenseState extends State<NewExpense> {
                 items: Category.values.map((categorys) => DropdownMenuItem(
                 value: categorys,
                 child: Text(categorys.name.toUpperCase()))).toList(), onChanged: (value){
-              print(value);
               if(value == null){
                 return;
               }

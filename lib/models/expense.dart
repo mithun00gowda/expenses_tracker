@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +10,7 @@ enum Category {
   food,travel,leisure,work
 }
 
-const CategoryIcons = {
+const categoryIcons = {
   Category.food: Icons.lunch_dining,
   Category.travel:Icons.flight_takeoff,
   Category.leisure:Icons.movie,
